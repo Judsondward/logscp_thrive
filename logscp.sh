@@ -17,7 +17,14 @@ then
         ip=10.10.10.99
 fi
 
-path=$(sshpass -e ssh firefly@$ip -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'if [[ -f /var/log/granbury/thrive-server.log ]] ; then echo "/var/log/granbury/thrive-server.log" ; elif [[ -f /opt/thrive/wildfly-10.1.0.Final/standalone/log/server.log ]]; then echo "/opt/thrive/wildfly-10.1.0.Final/standalone/log/server.log" ; elif [[ -f /home/firefly/jboss-as-7.1.1.Final/standlong/log/server.log ]];  then echo "/home/firefly/jboss-as-7.1.1.Final/standlong/log/server.log" ; else echo "" ; fi ;')
+# Locate path and export it to a variable.
+#
+# Current Valid Paths:
+# /var/log/granbury/thrive-server
+# /opt/thrive/wildfly-10.1.1.Final/standalone/log/server
+# /home/firefly/jboss-as-7.1.1.Final/standalone/log/server
+
+path=$(sshpass -e ssh firefly@$ip -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'if [[ -f /var/log/granbury/thrive-server.log ]] ; then echo "/var/log/granbury/thrive-server.log" ; elif [[ -f /opt/thrive/wildfly-10.1.0.Final/standalone/log/server.log ]]; then echo "/opt/thrive/wildfly-10.1.0.Final/standalone/log/server.log" ; elif [[ -f /home/firefly/jboss-as-7.1.1.Final/standlone/log/server.log ]];  then echo "/home/firefly/jboss-as-7.1.1.Final/standlone/log/server.log" ; else echo "" ; fi ;')
 
 if [ -z $path ]
 then
