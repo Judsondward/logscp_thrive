@@ -21,7 +21,7 @@ path=$(sshpass -e ssh firefly@$ip -o StrictHostKeyChecking=no -o UserKnownHostsF
 
 if [ -z $path ]
 then
-	echo "Error Finding Log File, check version"
+	echo "Unable to locate log file, check version."
 elif [ -z $date ]
 then
 	sshpass -e scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null firefly@$ip:$path .
