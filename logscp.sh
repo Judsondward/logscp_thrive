@@ -1,16 +1,30 @@
 #!/bin/bash
-if [ -z $1 ]
+
+read -p "IP Address (Leave Blank for 10.10.10.99): " ip
+read -p "Log Date YYYY-MM-DD (Leave Blank for current date): " date
+read -p "Firefly Password: " -s SSHPASS
+
+if [ -z SSHPASS ]
 then
-        i=10.10.10.99
+	echo No password entered, exiting.
+	exit 1
 else
-        i=$1
+	export SSHPASS
 fi
 
-j=$(ssh firefly@$i -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'if [[ -f /var/log/granbury/thrive-server.log ]] ; then echo "/var/log/granbury/thrive-server.log" ; elif [[ -f /opt/thrive/wildfly-10.1.0.Final/standalone/log/server.log ]]; then echo "/opt/thrive/wildfly-10.1.0.Final/standalone/log/server.log" ; elif [[ -f /home/firefly/jboss-as-7.1.1.Final/standlong/log/server.log ]];  then echo "/home/firefly/jboss-as-7.1.1.Final/standlong/log/server.log" ; else echo "" ; fi ;')
+if [ -z $ip ]
+then
+        ip=10.10.10.99
+fi
 
-if [ -z $j ]
+path=$(sshpass -e ssh firefly@$ip -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'if [[ -f /var/log/granbury/thrive-server.log ]] ; then echo "/var/log/granbury/thrive-server.log" ; elif [[ -f /opt/thrive/wildfly-10.1.0.Final/standalone/log/server.log ]]; then echo "/opt/thrive/wildfly-10.1.0.Final/standalone/log/server.log" ; elif [[ -f /home/firefly/jboss-as-7.1.1.Final/standlong/log/server.log ]];  then echo "/home/firefly/jboss-as-7.1.1.Final/standlong/log/server.log" ; else echo "" ; fi ;')
+
+if [ -z $path ]
 then
 	echo "Error Finding Log File, check version"
+elif [ -z $date ]
+then
+	sshpass -e scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null firefly@$ip:$path .
 else
-	scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null firefly@$i:$j .
+	sshpass -e scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null firefly@$ip:$path.$date .
 fi
