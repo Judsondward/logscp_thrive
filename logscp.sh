@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Fetches logs from a Thrive Server and SCPs them back to this host
 read -p "IP Address (Leave Blank for 10.10.10.99): " ip
 read -p "Log Date YYYY-MM-DD (Leave Blank for current date): " date
 read -p "Firefly Password: " -s SSHPASS
