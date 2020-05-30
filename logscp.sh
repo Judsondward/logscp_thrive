@@ -31,7 +31,9 @@ then
 	echo "Unable to locate log file, check version."
 elif [ -z $date ]
 then
+	echo "Copying $path"
 	sshpass -e scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null firefly@$ip:$path .
 else
+	echo "Copying $path for $date"
 	sshpass -e scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null firefly@$ip:$path.$date .
 fi
